@@ -1,0 +1,5 @@
+In writable/readable there is one buffer in each stream object(an obj contains events, methods, properties, buffer)
+
+but in duplex/transform there are two buffers.
+
+We can get the size of internal buffer by using stream.writableHighWaterMark

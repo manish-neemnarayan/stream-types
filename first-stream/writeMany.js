@@ -51,6 +51,7 @@ const fs = require("node:fs/promises");
     console.time("writeMany");
     const fileHandler = await fs.open("./test.txt", "w");
     const stream = fileHandler.createWriteStream();
+    console.log(stream.writableHighWaterMark);
     for (let i = 0; i < 1000000; i++) {
       const buff = Buffer.from(`${i} `, "utf8");
       stream.write(buff);
