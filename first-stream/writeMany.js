@@ -45,6 +45,7 @@ const fs = require("node:fs/promises");
 // CPU Consumption: 100% (1core)
 // Memory Consumption: ~400 MB
 // don't do it this way not a good practice
+
 (async () => {
   try {
     console.time("writeMany");
