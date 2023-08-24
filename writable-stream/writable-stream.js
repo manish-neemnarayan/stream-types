@@ -19,9 +19,8 @@ const { stderr } = require("node:process");
     console.log(stream.writableLength);
 
     stream.on("drain", () => {
-      console.log("Now it is safe to write more"); // this is a drain event which means buffer is empty now and you can write more
+      console.log("Now it is safe to write more"); // this is a drain event which means buffer is empty
     });
-
     // fileHandler.close();
     console.timeEnd("writeMany");
   } catch (error) {

@@ -40,24 +40,65 @@
 // })();
 
 // using streams-------------------------------------------------------------------
+// const fs = require("node:fs/promises");
+// // Execution Time: 270 ms
+// // CPU Consumption: 100% (1core)
+// // Memory Consumption: ~400 MB
+// // don't do it this way not a good practice
+
+// (async () => {
+//   try {
+//     console.time("writeMany");
+//     const fileHandler = await fs.open("./test.txt", "w");
+//     const stream = fileHandler.createWriteStream();
+//     console.log(stream.writableHighWaterMark);
+//     for (let i = 0; i < 1000000; i++) {
+//       const buff = Buffer.from(`${i} `, "utf8");
+//       stream.write(buff);
+//     }
+//     fileHandler.close();
+//     console.timeEnd("writeMany");
+//   } catch (error) {
+//     console.log(error);
+//   }
+// })();
+
 const fs = require("node:fs/promises");
-// Execution Time: 270 ms
+// Refactoring the above code  using streams
+// Execution Time:
 // CPU Consumption: 100% (1core)
-// Memory Consumption: ~400 MB
-// don't do it this way not a good practice
+// Memory Consumption: 45 MB
 
 (async () => {
   try {
     console.time("writeMany");
     const fileHandler = await fs.open("./test.txt", "w");
     const stream = fileHandler.createWriteStream();
-    console.log(stream.writableHighWaterMark);
-    for (let i = 0; i < 1000000; i++) {
-      const buff = Buffer.from(`${i} `, "utf8");
-      stream.write(buff);
+
+    let i = 0;
+
+
+    function writeMany() {
+        while (i <= 1000000) {
+          const buff = Buffer.from(`${i} `, "utf8");
+          if(i === 1000000) {
+            return stream.end(buff);
+          }
+          if (!stream.write(buff)) break;
+          i++;
+        }      
     }
-    fileHandler.close();
-    console.timeEnd("writeMany");
+    writeMany();
+    stream.on("drain", () => {
+      writeMany();
+    });
+
+    stream.on("finish", () => {
+      console.log("Done");
+      console.timeEnd("writeMany");
+      fileHandler.close();
+    })
+
   } catch (error) {
     console.log(error);
   }
