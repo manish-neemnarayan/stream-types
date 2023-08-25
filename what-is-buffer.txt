@@ -1,1 +1,2 @@
 buffer is a location in a Memory that holds specific amount of data.
+

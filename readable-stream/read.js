@@ -7,10 +7,32 @@ const fs = require("node:fs/promises");
     const streamRead = fileHandler.createReadStream();
     const streamWrite = fileHandlerWrite.createWriteStream();
     console.time("read many");
+
+    let split = '';
     streamRead.on("data", (chunk) => {
+
+        //-------extra code for experiment start---------------
+        const numbers = chunk.toString('utf8').split(" ");
+
+        if(Number(numbers[0]) !== Number(numbers[1]) - 1) {
+            if (split) {
+                numbers[0] = split.trim() + numbers[0].trim();
+            }
+        }
+
+        if(Number(numbers[numbers.length - 2]) + 1 !== Number(numbers[numbers.length - 1])) {
+            split = numbers.pop();
+        }
+
+        console.log("--------------------------------------");
+        console.log(numbers);
+        console.log("--------------------------------------");
+
+        //-------extra code for experiment end---------------
+
         if(!streamWrite.write(chunk)) {
             streamRead.pause();
-        }        
+        }  
     })
     
     streamWrite.on("drain", () => {
