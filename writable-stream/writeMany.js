@@ -72,16 +72,16 @@ const fs = require("node:fs/promises");
 (async () => {
   try {
     console.time("writeMany");
-    const fileHandler = await fs.open("../copy-using-pipe/test.txt", "w");
+    const fileHandler = await fs.open("../copy-using-pipe/test-big.txt", "w");
     const stream = fileHandler.createWriteStream();
 
     let i = 0;
 
 
     function writeMany() {
-        while (i <= 1000000) {
+        while (i <= 1000000000) {
           const buff = Buffer.from(`${i} `, "utf8");
-          if(i === 1000000) {
+          if(i === 1000000000) {
             return stream.end(buff);
           }
           if (!stream.write(buff)) break;

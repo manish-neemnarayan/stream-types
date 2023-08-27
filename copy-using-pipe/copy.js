@@ -1,13 +1,22 @@
-const { read } = require("node:fs");
 const fs = require("node:fs/promises");
 
+
+// file size copied: 9.9 gb 
+// memory usage: ~34 MB
+// execution time: ~19 seconds
+
+// to check the difference, execute the cope-pipe.js file. And difference is significant when file size is gigantic really.
+// using pipe is the best way to do it
+
 (async () => {
-    const sourceFile = await fs.open("./test.txt", "r");
-    const destFile = await fs.open("./dest.txt", "w");
+    console.time("operation many done");
+
+    const sourceFile = await fs.open("./test-big.txt", "r");
+    const destFile = await fs.open("./dest-big.txt", "w");
 
     // bytesRead/buffer comes from read().
     // we are not using copy() which uses streams underhood.
-    // manually we are trying to copy just like streams
+    // manually we are trying to copy just like streams using await
     // if bytesRead not equal to 0 means there are some bytes to read then
     // we read() till it is equal to 0 and then writing to destination file.
     let bytesRead = -1;
@@ -27,6 +36,9 @@ const fs = require("node:fs/promises");
         } else {
             destFile.write(readFile.buffer);  
         }
+
     }
+
+    console.timeEnd("operation many done");
 
 })();
