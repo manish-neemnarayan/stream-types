@@ -11,8 +11,8 @@ const fs = require("node:fs/promises");
 (async () => {
     console.time("operation many done");
 
-    const sourceFile = await fs.open("./test-big.txt", "r");
-    const destFile = await fs.open("./dest-big.txt", "w");
+    const sourceFile = await fs.open("./test.txt", "r");
+    const destFile = await fs.open("./dest.txt", "w");
 
     // bytesRead/buffer comes from read().
     // we are not using copy() which uses streams underhood.
